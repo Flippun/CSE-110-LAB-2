@@ -121,6 +121,7 @@ input {
 textarea {
     min-width: 178px;
     max-width: 178px;
+    min-height: 75px;
     max-height: 500px;
     border: 1px solid var(--border-light);
     padding: 10px;
