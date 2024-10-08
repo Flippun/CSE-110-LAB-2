@@ -173,3 +173,10 @@ textarea {
     background-color: rgb(220, 89, 89);
     color: white;
 }
+
+.favorites-list {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    padding-left: 5px;
+}
