@@ -24,27 +24,6 @@ function App() {
         setCurrentTheme(currentTheme === themes.light ? themes.dark : themes.light);
     };
 
-    const deleteNote = (noteId: number) => {
-        const updatedNotes = notes.filter(note => note.id !== noteId);
-        setNotes(updatedNotes);
-    };
-    
-    const toggleFavorite = (noteId: number) => {
-        const updatedNotes = notes.map((note) => {
-            if (note.id === noteId) {
-                const isFavorite = !note.isFavorite; 
-                if (isFavorite) {
-                    setFavoriteNotes([...favoriteNotes, note]); 
-                } else {
-                    setFavoriteNotes(favoriteNotes.filter((fav) => fav.id !== note.id)); 
-                }
-                return { ...note, isFavorite }; 
-            }
-            return note;
-        });
-        setNotes(updatedNotes); 
-    };
-
     const createNoteHandler = (event: React.FormEvent) => {
         event.preventDefault(); 
         const newNote = {
@@ -58,20 +37,56 @@ function App() {
         setCreateNote(initialNote);
     };
 
-    const handleNoteChange = (property: keyof Note, value: string) => {
-        const updatedNotes = notes.map(note => {
-            if (note.id === selectedNote.id) {
-                return { ...note, [property]: value };
+    const deleteNote = (noteId: number) => {
+        const updatedNotes = notes.filter(note => note.id !== noteId);
+
+        const updatedFavorites = updatedNotes.filter(note => note.isFavorite);
+        setFavoriteNotes(updatedFavorites); 
+        setNotes(updatedNotes); 
+    };
+    
+    const toggleFavorite = (noteId: number) => {
+        const updatedNotes = notes.map((note) => {
+            if (note.id === noteId) {
+                const isFavorite = !note.isFavorite; 
+                if (isFavorite) {
+                    return { ...note, isFavorite }; 
+                } else {
+                    return { ...note, isFavorite }; 
+                }
             }
             return note;
         });
-        setNotes(updatedNotes);
+    
+        const updatedFavorites = updatedNotes.filter(note => note.isFavorite); 
+        setFavoriteNotes(updatedFavorites); 
+        setNotes(updatedNotes); 
+    };
+
+    const handleNoteChange = (property: keyof Note, value: string) => {
+        const updatedNotes = notes.map(note => {
+            if (note.id === selectedNote.id) {
+                const updatedNote = { ...note, [property]: value };
+                return updatedNote; 
+            }
+            return note;
+        });
+    
+        const updatedFavorites = updatedNotes.filter(note => note.isFavorite);
+        setFavoriteNotes(updatedFavorites); 
+        setNotes(updatedNotes); 
     };
 
     return (
     <ThemeContext.Provider value={currentTheme}>
     <div className={`app-container ${currentTheme === themes.dark ? 'dark-mode' : ''}`}>
         <form className="note-form" onSubmit={createNoteHandler}>
+            <div className="theme-button">
+                <button onClick={toggleTheme}>
+                    Toggle to {currentTheme === themes.light ? "Dark" : "Light"} Mode
+                </button>
+            </div>
+            
             <div><input
                 placeholder="Note Title"
                 value={createNote.title}
@@ -118,7 +133,7 @@ function App() {
                     suppressContentEditableWarning
                     onFocus={() => setSelectedNote(note)} 
                     onBlur={(e) => {
-                        const newTitle = e.target.innerText;
+                        const newTitle = e.currentTarget.innerText;
                         handleNoteChange('title', newTitle);
                     }}
                 >{note.title}</h2>
@@ -127,7 +142,7 @@ function App() {
                     suppressContentEditableWarning
                     onFocus={() => setSelectedNote(note)} 
                     onBlur={(e) => {
-                        const newContent = e.target.innerText;
+                        const newContent = e.currentTarget.innerText;
                         handleNoteChange('content', newContent);
                     }}
                 >{note.content}</p>
@@ -136,18 +151,12 @@ function App() {
                     suppressContentEditableWarning
                     onFocus={() => setSelectedNote(note)} 
                     onBlur={(e) => {
-                        const newLabel = e.target.innerText as Label; 
+                        const newLabel = e.currentTarget.innerText as Label; 
                         handleNoteChange('label', newLabel);
                     }}
                 >{note.label}</p>
             </div>
             ))}
-        </div>
-
-        <div className="theme-button">
-            <button onClick={toggleTheme}>
-            Toggle to {currentTheme === themes.light ? "Dark" : "Light"} Mode
-            </button>
         </div>
 
         <div className="favorites-list">

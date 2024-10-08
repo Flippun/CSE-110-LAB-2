@@ -34,7 +34,6 @@ body {
 
 .note-form {
     display: flex;
-    border: 1px solid var(--border-light);
     flex-direction: column;
 }
 
@@ -116,10 +115,26 @@ input {
     border: 1px solid var(--border-light);
     padding: 10px;
     font-size: 16px;
-    width: 165px;
+    width: 178px;
 }
 
-.dark-mode input {
+textarea {
+    min-width: 178px;
+    max-width: 178px;
+    max-height: 500px;
+    border: 1px solid var(--border-light);
+    padding: 10px;
+}
+
+.note-form select {
+    width: 200px;
+    border: 1px solid var(--border-light);
+    padding: 10px;
+}
+
+.dark-mode input,
+.dark-mode textarea
+.dark-mode select {
     border: 1px solid var(--border-dark);
 }
 
@@ -130,16 +145,17 @@ input {
     padding: 10px;
     font-size: 16px;
     color: white;
+    width: 200px;
+}
+
+.dark-mode .note-form button {
+    background-color: var(--button-background-dark);
 }
 
 .note-form button:hover,
 .dark-mode .note-form button:hover {
     background-color: rgb(106, 175, 198);
     cursor: pointer;
-}
-
-.dark-mode .note-form button {
-    background-color: var(--button-background-dark);
 }
 
 .edit-buttons {
