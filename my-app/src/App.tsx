@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useState, useEffect} from 'react';
+import { ThemeContext, themes } from './themeContext';
 import { Note } from "./types"; // Import the Label type from the appropriate module
 import { dummyNotesList } from "./constants"; // Import the dummyNotesList from the appropriate module
 
@@ -7,6 +8,13 @@ import { dummyNotesList } from "./constants"; // Import the dummyNotesList from 
 function App() {
     const [notes, setNotes] = useState(dummyNotesList);
     const [favoriteNotes, setFavoriteNotes] = useState<Note[]>([]);
+
+    const [currentTheme, setCurrentTheme] = useState(themes.light);
+
+    const toggleTheme = () => {
+        setCurrentTheme(currentTheme === themes.light ? themes.dark : themes.light);
+    };
+
 
      // Toggle the favorite status of a note
     const toggleFavorite = (noteId: number) => {
@@ -26,7 +34,8 @@ function App() {
     };
 
     return (
-    <div className='app-container'>
+    <ThemeContext.Provider value={currentTheme}>
+    <div className={`app-container ${currentTheme === themes.dark ? 'dark-mode' : ''}`}>
         <form className="note-form">
             <div><input placeholder="Note Title" ></input></div>
 
@@ -40,7 +49,7 @@ function App() {
                 <option value="other">Other</option>
             </select></div>
 
-            <div><button type="submit">Create Note</button></div>
+            <div><button type="submit">Create Note</button></div>  
         </form>
         
         <div className="notes-grid">
@@ -61,6 +70,12 @@ function App() {
             ))}
         </div>
 
+        <div className="theme-button">
+            <button onClick={toggleTheme}>
+            Toggle to {currentTheme === themes.light ? "Dark" : "Light"} Mode
+            </button>
+        </div>
+
         {/* New Section to display just the titles of favorited notes */}
         <div className="favorites-list">
             <h2>List of favorites:</h2>
@@ -70,8 +85,7 @@ function App() {
                 ))}
             </ul>
         </div>
-   </div>
-
+   </div></ThemeContext.Provider>
  );
 }
 

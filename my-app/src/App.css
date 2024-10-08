@@ -1,24 +1,47 @@
-.note-individual {
-    border: 1px solid black;
-    display: "flex";
-    flex-direction: column;
+:root {
+    --background-light: #eeeeee;
+    --foreground-light: #000000;
+    --border-light: black;
+    --note-item-background-light: #f9f9f9;
+    --button-background-light: rgb(64, 154, 184);
+    --button-hover-background-light: rgb(106, 175, 198);
+
+    --background-dark: #222222;
+    --foreground-dark: #ffffff;
+    --border-dark: #444444;
+    --note-item-background-dark: #333333;
+    --button-background-dark: rgb(80, 154, 184);
+    --button-hover-background-dark: rgb(106, 175, 198);
 }
-   
+
+
+body {
+    margin: 0px;
+    background-color: var(--background-light);
+    color: var(--foreground-light);
+}
+
+.dark-mode {
+    background-color: var(--background-dark);
+    color: var(--foreground-dark);
+}
+
 .app-container {
-    display: "flex";
+    display: flex;
     flex-direction: column;
+    min-height: 100vh
 }
 
 .note-form {
-    display: "flex";
-    border: 1px solid black;
+    display: flex;
+    border: 1px solid var(--border-light);
     flex-direction: column;
 }
 
-body {
-    margin: 20px;
-    background-color: lightgrey;
-    color: black;
+.note-individual {
+    border: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
 }
 
 .app-container {
@@ -34,21 +57,28 @@ body {
 }
 
 .notes-grid {
+    flex-grow: 1;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     grid-auto-rows: minmax(250px, auto);
-    gap: 20px;
+    gap: 15px;
 }
 
 .note-item {
     display: flex;
     flex-direction: column;
-    border: 1px solid #ccc;
-    padding: 10px;
+    border: 1px solid var(--border-light);
+    padding: 5px;
+    margin: 10px;
     border-radius: 5px;
-    background-color: #f9f9f9;
+    background-color: var(--note-item-background-light);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    /* cursor: pointer; */
+    cursor: pointer;
+}
+
+.dark-mode .note-item {
+    border: 1px solid var(--border-dark);
+    background-color: var(--note-item-background-dark);
 }
 
 .notes-header {
@@ -78,24 +108,33 @@ h2 {
 
 input {
     border-radius: 5px;
-    border: 1px solid black;
+    border: 1px solid var(--border-light);
     padding: 10px;
     font-size: 16px;
     width: 165px;
 }
 
+.dark-mode input {
+    border: 1px solid var(--border-dark);
+}
+
 .note-form button {
     border-radius: 5px;
-    background-color: rgb(64, 154, 184);
+    background-color: var(--button-background-light);
     border: none;
     padding: 10px;
     font-size: 16px;
     color: white;
 }
 
-.note-form button:hover {
+.note-form button:hover,
+.dark-mode .note-form button:hover {
     background-color: rgb(106, 175, 198);
     cursor: pointer;
+}
+
+.dark-mode .note-form button {
+    background-color: var(--button-background-dark);
 }
 
 .edit-buttons {
@@ -112,4 +151,3 @@ input {
     background-color: rgb(220, 89, 89);
     color: white;
 }
-

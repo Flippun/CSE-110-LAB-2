@@ -12,27 +12,7 @@ export function ToggleTheme() {
     return (
       <ThemeContext.Provider value={currentTheme}>
         <button onClick={toggleTheme}> Toggle Theme </button>
-        {/* <LikeCounter /> */}
       </ThemeContext.Provider>
     );
 }
 export default ToggleTheme;
-   
-
-export function LikeCounter() {
-    const [Favs, setFavs] = useState(0);
-
-    const theme = useContext(ThemeContext);
-    return (
-        <div
-            style={{
-            background: theme.background,
-            color: theme.foreground,
-            padding: "20px",
-            }}
-        >
-             <h2>List of favorites:</h2>
-             <p>You clicked {Favs} times </p>
-        </div>
-    );
-}
