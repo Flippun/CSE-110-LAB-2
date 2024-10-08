@@ -12,14 +12,15 @@ export function ToggleTheme() {
     return (
       <ThemeContext.Provider value={currentTheme}>
         <button onClick={toggleTheme}> Toggle Theme </button>
-        <ClickCounter />
+        {/* <LikeCounter /> */}
       </ThemeContext.Provider>
     );
 }
 export default ToggleTheme;
    
-export function ClickCounter() {
-    const [count, setCount] = useState(0);
+
+export function LikeCounter() {
+    const [Favs, setFavs] = useState(0);
 
     const theme = useContext(ThemeContext);
     return (
@@ -30,13 +31,8 @@ export function ClickCounter() {
             padding: "20px",
             }}
         >
-             <p>You clicked {count} times </p>
-             <button
-             onClick={() => setCount(count + 1)}
-            style={{ background: theme.foreground, color: theme.background }}
-            >
-            Click me
-            </button>
+             <h2>List of favorites:</h2>
+             <p>You clicked {Favs} times </p>
         </div>
     );
 }
