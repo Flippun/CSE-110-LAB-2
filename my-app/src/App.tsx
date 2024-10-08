@@ -17,6 +17,8 @@ function App() {
     const [createNote, setCreateNote] = useState(initialNote);
     const [favoriteNotes, setFavoriteNotes] = useState<Note[]>([]);
     const [currentTheme, setCurrentTheme] = useState(themes.light);
+    const [selectedNote, setSelectedNote] = useState<Note>(initialNote);
+    
 
     const toggleTheme = () => {
         setCurrentTheme(currentTheme === themes.light ? themes.dark : themes.light);
@@ -56,6 +58,16 @@ function App() {
         setCreateNote(initialNote);
     };
 
+    const handleNoteChange = (property: keyof Note, value: string) => {
+        const updatedNotes = notes.map(note => {
+            if (note.id === selectedNote.id) {
+                return { ...note, [property]: value };
+            }
+            return note;
+        });
+        setNotes(updatedNotes);
+    };
+
     return (
     <ThemeContext.Provider value={currentTheme}>
     <div className={`app-container ${currentTheme === themes.dark ? 'dark-mode' : ''}`}>
@@ -92,9 +104,7 @@ function App() {
         
         <div className="notes-grid">
             {notes.map((note) => (
-                <div
-                key={note.id}
-                className="note-item">
+                <div key={note.id} className="note-item">
                 <div className="notes-header">
                     <button onClick={() => toggleFavorite(note.id)}>
                         {note.isFavorite ? "❤️" : "♡"}
@@ -103,10 +113,34 @@ function App() {
                         x
                     </button>
                 </div>
-                <h2> {note.title} </h2>
-                <p> {note.content} </p>
-                <p> {note.label} </p>
-                </div>
+                <h2
+                    contentEditable
+                    suppressContentEditableWarning
+                    onFocus={() => setSelectedNote(note)} 
+                    onBlur={(e) => {
+                        const newTitle = e.target.innerText;
+                        handleNoteChange('title', newTitle);
+                    }}
+                >{note.title}</h2>
+                <p
+                    contentEditable
+                    suppressContentEditableWarning
+                    onFocus={() => setSelectedNote(note)} 
+                    onBlur={(e) => {
+                        const newContent = e.target.innerText;
+                        handleNoteChange('content', newContent);
+                    }}
+                >{note.content}</p>
+                <p
+                    contentEditable
+                    suppressContentEditableWarning
+                    onFocus={() => setSelectedNote(note)} 
+                    onBlur={(e) => {
+                        const newLabel = e.target.innerText as Label; 
+                        handleNoteChange('label', newLabel);
+                    }}
+                >{note.label}</p>
+            </div>
             ))}
         </div>
 
