@@ -22,6 +22,10 @@ function App() {
         setCurrentTheme(currentTheme === themes.light ? themes.dark : themes.light);
     };
 
+    const deleteNote = (noteId: number) => {
+        const updatedNotes = notes.filter(note => note.id !== noteId);
+        setNotes(updatedNotes);
+    };
     
     const toggleFavorite = (noteId: number) => {
         const updatedNotes = notes.map((note) => {
@@ -94,8 +98,10 @@ function App() {
                 <div className="notes-header">
                     <button onClick={() => toggleFavorite(note.id)}>
                         {note.isFavorite ? "❤️" : "♡"}
+                    </button> 
+                    <button onClick={() => deleteNote(note.id)}>
+                        x
                     </button>
-                    <button>x</button>
                 </div>
                 <h2> {note.title} </h2>
                 <p> {note.content} </p>
