@@ -1,52 +1,85 @@
 import './App.css';
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, FormEvent} from 'react';
 import { ThemeContext, themes } from './themeContext';
-import { Note } from "./types"; // Import the Label type from the appropriate module
-import { dummyNotesList } from "./constants"; // Import the dummyNotesList from the appropriate module
+import { Label, Note } from "./types"; 
+import { dummyNotesList } from "./constants"; 
 
 
 function App() {
     const [notes, setNotes] = useState(dummyNotesList);
+    const initialNote = {
+        id: -1,
+        title: "",
+        content: "",
+        label: Label.other,
+        isFavorite: false,
+    };
+    const [createNote, setCreateNote] = useState(initialNote);
     const [favoriteNotes, setFavoriteNotes] = useState<Note[]>([]);
-
     const [currentTheme, setCurrentTheme] = useState(themes.light);
 
     const toggleTheme = () => {
         setCurrentTheme(currentTheme === themes.light ? themes.dark : themes.light);
     };
 
-
-     // Toggle the favorite status of a note
     const toggleFavorite = (noteId: number) => {
         const updatedNotes = notes.map((note) => {
             if (note.id === noteId) {
-                const isFavorite = !note.isFavorite; // Toggle favorite status
+                const isFavorite = !note.isFavorite; 
                 if (isFavorite) {
-                    setFavoriteNotes([...favoriteNotes, note]); // Add to favorites
+                    setFavoriteNotes([...favoriteNotes, note]); 
                 } else {
-                    setFavoriteNotes(favoriteNotes.filter((fav) => fav.id !== note.id)); // Remove from favorites
+                    setFavoriteNotes(favoriteNotes.filter((fav) => fav.id !== note.id)); 
                 }
-                return { ...note, isFavorite }; // Update the note's favorite status
+                return { ...note, isFavorite }; 
             }
             return note;
         });
         setNotes(updatedNotes); 
     };
 
+    const createNoteHandler = (event: React.FormEvent) => {
+        event.preventDefault(); 
+        const newNote = {
+            id: notes.length + 1, 
+            title: createNote.title,
+            content: createNote.content,
+            label: createNote.label,
+            isFavorite: false, 
+        };
+        setNotes([...notes, newNote]);
+        setCreateNote(initialNote);
+    };
+
     return (
     <ThemeContext.Provider value={currentTheme}>
     <div className={`app-container ${currentTheme === themes.dark ? 'dark-mode' : ''}`}>
-        <form className="note-form">
-            <div><input placeholder="Note Title" ></input></div>
+        <form className="note-form" onSubmit={createNoteHandler}>
+            <div><input
+                placeholder="Note Title"
+                value={createNote.title}
+                onChange={(event) =>
+                setCreateNote({ ...createNote, title: event.target.value })}
+                required>
+            </input></div>
 
-            <div><textarea placeholder="Note Content"></textarea></div>
+            <div><textarea
+                placeholder="Note Content"
+                value={createNote.content}
+                onChange={(event) =>
+                    setCreateNote({ ...createNote, content: event.target.value })}
+                required
+            ></textarea></div>
 
-            <div><select name="labels" id="label-select">
-                <option value="">--Please choose an option--</option>
-                <option value="personal">Personal</option>
-                <option value="work">Work</option>
-                <option value="study">Study</option>
-                <option value="other">Other</option>
+            <div><select
+            value={createNote.label}
+            onChange={(event) =>
+                setCreateNote({ ...createNote, label: event.target.value as Label })}
+                required>
+                <option value={Label.personal}>Personal</option>
+                <option value={Label.study}>Study</option>
+                <option value={Label.work}>Work</option>
+                <option value={Label.other}>Other</option>
             </select></div>
 
             <div><button type="submit">Create Note</button></div>  
@@ -58,10 +91,10 @@ function App() {
                 key={note.id}
                 className="note-item">
                 <div className="notes-header">
-                    {/* Toggle favorite when the heart button is clicked */}
                     <button onClick={() => toggleFavorite(note.id)}>
                         {note.isFavorite ? "❤️" : "♡"}
                     </button>
+                    <button>x</button>
                 </div>
                 <h2> {note.title} </h2>
                 <p> {note.content} </p>
@@ -76,7 +109,6 @@ function App() {
             </button>
         </div>
 
-        {/* New Section to display just the titles of favorited notes */}
         <div className="favorites-list">
             <h2>List of favorites:</h2>
             <ul>

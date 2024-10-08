@@ -92,6 +92,11 @@ body {
     border: none;
     cursor: pointer;
     max-width: fit-content;
+    color: var(--foreground-light);
+}
+
+.dark-mode .notes-header button {
+    color: var(--foreground-dark);
 }
 
 h2 {
