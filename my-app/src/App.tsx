@@ -22,6 +22,7 @@ function App() {
         setCurrentTheme(currentTheme === themes.light ? themes.dark : themes.light);
     };
 
+    
     const toggleFavorite = (noteId: number) => {
         const updatedNotes = notes.map((note) => {
             if (note.id === noteId) {
